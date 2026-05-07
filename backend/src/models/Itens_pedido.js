@@ -69,12 +69,18 @@ export class ItensPedidos {
         }
     }
 
+    static calcularSubTotal(itens) {
+        return itens.reduce(
+            (total, item) => total + (item.valorUnitario * item.quantidade)
+        );
+    }
+    
     // Design pattern
     static criar(dados) {
-        return new Pedido (dados.precoUnitario, dados.subTotal, dados.quantidade, dados.idProduto);
+        return new ItensPedidos (dados.precoUnitario, dados.subTotal, dados.quantidade, dados.idProduto);
     }    
 
     static editar(dados) {
-        return new Pedido (dados.precoUnitario, dados.subTotal, dados.quantidade, dados.idProduto, dados.id);
+        return new ItensPedidos (dados.precoUnitario, dados.subTotal, dados.quantidade, dados.idProduto, dados.id);
     }
 }
