@@ -69,7 +69,7 @@ export class ItensPedidos {
         }
     }
 
-    static calcularSubTotal(itens) {
+    static calcularValorTotal(itens) {
         return itens.reduce(
             (total, item) => total + (item.valorUnitario * item.quantidade)
         );

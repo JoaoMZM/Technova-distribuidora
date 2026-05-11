@@ -1,4 +1,4 @@
-import { Status } from "../enum/statusPedido";
+import { Status } from "../enum/statusPedido.js";
 
 export class Pedido {
     #statusPedido;

@@ -1,10 +1,13 @@
-import { db } from "../configs/database";
+import { db } from "../configs/database.js";
+import produtoRepository from "./produto.repository.js";
 
 const pedidoRepository = {
 
     criarPedido: async (pedido, itensPedido) => {
         const conn = await db.getConnection();
         try {
+            await conn.beginTransaction();
+            
             const sqlPed = 'INSERT INTO pedidos (valor_total, status_pedido) VALUES (?, ?);';
             const valuesPed = [pedido.valorTotal, pedido.status];
             const [rowsPed] = await conn.execute(sqlPed, valuesPed);
@@ -13,8 +16,8 @@ const pedidoRepository = {
 
             itensPedido.forEach(async item => {
                 const idProduto = item.idProduto;
-                const sqlItem = 'INSERT INTO itens_pedido (quantidade, preco_unitario, subTotal,id_pedido, id_produto) VALUES (?, ?, ?, ?, ?);'
-                const valuesItem = [item.quantidade, item.precoUnitario, item.subTotal, item.subTotal, idPedido, idProduto];
+                const sqlItem = 'INSERT INTO itens_pedido (quantidade, preco_unitario, subtotal,id_pedido, id_produto) VALUES (?, ?, ?, ?, ?);'
+                const valuesItem = [item.quantidade, item.precoUnitario, item.subTotal, idPedido, idProduto];
 
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
                 const estoqueAtual = produtoSelecionado[0].estoque_produto;
@@ -22,13 +25,10 @@ const pedidoRepository = {
 
                 const sqlProduto = 'UPDATE produtos SET estoque_produto = ? WHERE id_produto = ?;';
                 const valuesProduto = [novoEstoque, idProduto];
-
                 await conn.execute(sqlItem, valuesItem);
                 await conn.execute(sqlProduto, valuesProduto);
             });
 
-
-            const sqlProduto = 'UPDATE produtos SET estoque_produto = ? WHERE id_produto = ?'
             await conn.commit();
             return { rowsPed, rowsItem };
         } catch (error) {
