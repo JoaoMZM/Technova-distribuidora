@@ -10,7 +10,6 @@ const produtoRepository = {
 
     selecionarPorId: async (id) => {
         const sql = 'SELECT * FROM produtos WHERE id_produto = ?';
-        console.log(id);
         const [rows] = await db.execute(sql, [id]);
         return rows[0]; 
     },
@@ -31,7 +30,6 @@ const produtoRepository = {
                 produto.imagem_produto,
                 produto.id_categoria
             ];
-            console.log(values);
             const [result] = await conn.execute(sql, values);
 
             await conn.commit();
@@ -63,8 +61,6 @@ const produtoRepository = {
                 produto.id_categoria,
                 produto.id_produto
             ];
-
-            console.log(values)
 
             const [result] = await conn.execute(sql, values);
 

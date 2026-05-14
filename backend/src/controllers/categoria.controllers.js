@@ -18,7 +18,7 @@ const categoriaController = {
             
         } catch (error) {
             
-            console.log(error);
+            console.error(error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor', errorMessage: error.message })
             
         }
@@ -39,7 +39,7 @@ const categoriaController = {
     
         } catch (error) {
     
-            console.log(error);
+            console.error(error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor', errorMessage: error.message })
     
         }
@@ -57,7 +57,7 @@ const categoriaController = {
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor', errorMessage: error.message })
 
         }
@@ -87,7 +87,7 @@ const categoriaController = {
             
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor', errorMessage: error.message })
         }
     },
@@ -97,7 +97,6 @@ const categoriaController = {
 
             const id = Number(req.params.id)
             const produtoRelacionado = await categoriaRepository.selectProdutoPorCategoria(id);
-            console.log(produtoRelacionado)
             if(produtoRelacionado.length !== 0) {
                 return res.status(400).json({message: "Há um produto relacionado a esta categoria", produtosRelacionados: produtoRelacionado})
             }
@@ -106,7 +105,7 @@ const categoriaController = {
 
         } catch (error) {
 
-            console.log(error);
+            console.error(error);
             res.status(500).json({ message: 'Ocorreu um erro no servidor', errorMessage: error.message })
 
         }

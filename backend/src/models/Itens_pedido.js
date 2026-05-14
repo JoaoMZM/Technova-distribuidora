@@ -69,9 +69,13 @@ export class ItensPedidos {
         }
     }
 
+    static calcularSubTotal(quantidade, precoUnitario) {
+        return Number((quantidade* precoUnitario).toFixed(2));
+    }
+
     static calcularValorTotal(itens) {
         return itens.reduce(
-            (total, item) => total + (item.valorUnitario * item.quantidade)
+            (total, item) => total + item.subTotal, 0
         );
     }
     

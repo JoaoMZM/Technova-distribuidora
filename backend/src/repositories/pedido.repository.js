@@ -9,28 +9,26 @@ const pedidoRepository = {
             await conn.beginTransaction();
             
             const sqlPed = 'INSERT INTO pedidos (valor_total, status_pedido) VALUES (?, ?);';
-            const valuesPed = [pedido.valorTotal, pedido.status];
+            const valuesPed = [pedido.valorTotal, pedido.statusPedido];
             const [rowsPed] = await conn.execute(sqlPed, valuesPed);
-
             const idPedido = rowsPed.insertId;
 
             itensPedido.forEach(async item => {
                 const idProduto = item.idProduto;
-                const sqlItem = 'INSERT INTO itens_pedido (quantidade, preco_unitario, subtotal,id_pedido, id_produto) VALUES (?, ?, ?, ?, ?);'
+                const sqlItem = 'INSERT INTO itens_pedido (quantidade, preco_unitario, subtotal, id_pedido, id_produto) VALUES (?, ?, ?, ?, ?);'
                 const valuesItem = [item.quantidade, item.precoUnitario, item.subTotal, idPedido, idProduto];
+                console.log(valuesItem);
 
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
-                const estoqueAtual = produtoSelecionado[0].estoque_produto;
-                const novoEstoque = estoqueAtual - item.quantidade;
 
-                const sqlProduto = 'UPDATE produtos SET estoque_produto = ? WHERE id_produto = ?;';
-                const valuesProduto = [novoEstoque, idProduto];
+                const sqlProduto = 'UPDATE produtos SET estoque_produto = estoque_produto - ? WHERE id_produto = ?;';
+                const valuesProduto = [item.quantidade, idProduto];
                 await conn.execute(sqlItem, valuesItem);
                 await conn.execute(sqlProduto, valuesProduto);
             });
 
             await conn.commit();
-            return { rowsPed, rowsItem };
+            return rowsPed;
         } catch (error) {
             await conn.rollback();
             throw new Error(error);
@@ -39,12 +37,18 @@ const pedidoRepository = {
             conn.release();
         }
     },
-    diminuirEstoque: async (idProduto, quantidade) => {
-        const sql = 'UPDATE produtos SET estoque_produto = estoque_produto - ? WHERE id_produto = ? AND estoque_produto >= ?;';
-        const [resultado] = await connection.execute(sql, [quantidade, idProduto, quantidade]);
-        return resultado ;
-    }
+    
+    selectPedidos: async () => {
+        const sql = "SELECT * FROM pedidos;";
+        const rows = db.execute(sql);
+        return rows;
+    },
 
+    selectPedidosId: async (id) => {
+       const sql = "SELECT * FROM pedidos WHERE id_pedido = ?;";
+        const rows = db.execute(sql, [id]);
+        return rows;
+    }
 }
 
 export default pedidoRepository;

@@ -6,6 +6,10 @@ export class Pedido {
     #id;
 
     constructor(pStatus, pValor, pId) {
+        this.#validarStatusPedido(pStatus);
+        this.#validarValorTotal(pValor);
+        this.#validarId(pId);
+        
         this.#statusPedido = pStatus;
         this.#valorTotal = pValor;
         this.#id = pId;
@@ -29,28 +33,29 @@ export class Pedido {
         this.#validarId(value);
         this.#id = value;
     }
-    #validarStatusPedido (value) {
-        if(!Object.values(Status).includes(value)) {
-            throw new Error(`O Status digitado precisa ser: ${Object.values}`);
+
+    #validarStatusPedido(value) {
+        if (!Object.values(Status).includes(value)) {
+            throw new Error(`O Status digitado precisa ser: ${Object.values(Status)}`);
         }
     }
-    #validarValorTotal (value) {
-        if(isNaN(value) || !value || value <= 0) {
+    #validarValorTotal(value) {
+        if (isNaN(value) || !value || value <= 0) {
             throw new Error(`O valor do objeto foi inserido de maneira inadequada`);
         }
     }
-    #validarId (value) {
+    #validarId(value) {
         if (isNaN(value) || !value || value <= 0) {
-            throw new Error (`O id inserido não é válido`);
+            throw new Error(`O id inserido não é válido`);
         }
     }
 
     // Design pattern
     static criar(dados) {
-        return new Pedido (dados.statusPedido, dados.valorTotal);
-    }    
+        return new Pedido(dados.statusPedido, dados.valorTotal);
+    }
 
     static editar(dados) {
-        return new Pedido (dados.statusPedido, dados.valorTotal, dados.id);
+        return new Pedido(dados.statusPedido, dados.valorTotal, dados.id);
     }
 }

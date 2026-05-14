@@ -55,7 +55,6 @@ const produtoController = {
             }
 
             const produto = Produto.criar({ nome_produto, preco_produto, descricao_produto, estoque_produto, id_categoria, imagem_produto });
-            console.log(produto)
 
             const resultado = await produtoRepository.inserirProduto(produto);
 
@@ -82,8 +81,6 @@ const produtoController = {
 
             const { nome_produto, preco_produto, descricao_produto, estoque_produto, id_categoria } = req.body;
 
-            console.log(imagem_produto, nome_produto, preco_produto, descricao_produto, estoque_produto, id_categoria)
-
             const produtoAtual = await produtoRepository.selecionarPorId(id);
 
             if (!produtoAtual) {
@@ -91,7 +88,6 @@ const produtoController = {
             }
 
             const produto = Produto.editar({ nome_produto, preco_produto, imagem_produto, descricao_produto, estoque_produto, id_categoria }, produtoAtual);
-            console.log(produto);
 
             
             const resultado = await produtoRepository.atualizarProduto(produto);
