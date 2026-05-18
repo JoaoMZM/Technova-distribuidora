@@ -17,7 +17,6 @@ const pedidoRepository = {
                 const idProduto = item.idProduto;
                 const sqlItem = 'INSERT INTO itens_pedido (quantidade, preco_unitario, subtotal, id_pedido, id_produto) VALUES (?, ?, ?, ?, ?);'
                 const valuesItem = [item.quantidade, item.precoUnitario, item.subTotal, idPedido, idProduto];
-                console.log(valuesItem);
 
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
 

@@ -1,0 +1,425 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Technova_testes
+meta:
+  id: wrk_a907bae4271c4570a5148e502f2b3bdd
+  created: 1778522406685
+  modified: 1778522406685
+  description: ""
+collection:
+  - name: Pedidos
+    meta:
+      id: fld_cfcaae7a35e141e4b961a8ff48b2b316
+      created: 1778522416876
+      modified: 1778522416876
+      sortKey: -1778522416876
+      description: ""
+    children:
+      - url: http://localhost:8080/pedidos
+        name: create
+        meta:
+          id: req_8c07c8599d584c1093f264188f62a26e
+          created: 1778522426519
+          modified: 1779102291526
+          isPrivate: false
+          description: ""
+          sortKey: -1778522426519
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"statusPedido": "PENDENTE",
+            	"itens": [
+            		{
+            			"idProduto": 5,
+            			"quantidade": 3
+            		},
+            		{
+            			"idProduto": 5,
+            			"quantidade": 3
+            		}
+            	]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/pedidos
+        name: select
+        meta:
+          id: req_2efa9ee7275f4d2085b2da0ec51daccf
+          created: 1778772577968
+          modified: 1779102258112
+          isPrivate: false
+          description: ""
+          sortKey: -1778522426619
+        method: GET
+        parameters:
+          - name: ""
+            value: "1"
+            description: ""
+            disabled: false
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Produtos
+    meta:
+      id: fld_82fcb08f6e53478fa5e4b2d40e642763
+      created: 1779101214704
+      modified: 1779101214704
+      sortKey: -1779101214704
+      description: ""
+    children:
+      - url: http://localhost:8080/produtos
+        name: select
+        meta:
+          id: req_5e755765ea94475286f6f394302c07a4
+          created: 1779101302825
+          modified: 1779101386620
+          isPrivate: false
+          description: ""
+          sortKey: -1779101302825
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/produtos/6
+        name: delete
+        meta:
+          id: req_129445459e7749feb6d7507688ab11a9
+          created: 1779101305795
+          modified: 1779102235929
+          isPrivate: false
+          description: ""
+          sortKey: -1779101305795
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/produtos/6
+        name: update
+        meta:
+          id: req_5eed6588edb54bcdbc8088b384ba9420
+          created: 1779101308953
+          modified: 1779101883194
+          isPrivate: false
+          description: ""
+          sortKey: -1779101308953
+        method: PUT
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: nome_produto
+              value: teclado gamer
+              description: ""
+              disabled: false
+            - name: preco_produto
+              value: "400"
+              description: ""
+              disabled: false
+            - name: descricao_produto
+              value: sem luz
+              description: ""
+              disabled: false
+            - name: estoque_produto
+              value: "15"
+              description: ""
+              disabled: false
+            - name: id_categoria
+              value: "2"
+              description: ""
+              disabled: false
+            - name: imagem_produto
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\44968756836\Desktop\Mouse.jpg
+              type: file
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/produtos
+        name: create
+        meta:
+          id: req_a8382aa3012842f6813257f862ac7f8f
+          created: 1779101313046
+          modified: 1779101773619
+          isPrivate: false
+          description: ""
+          sortKey: -1779101313046
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: nome_produto
+              value: mouse gamer
+              description: ""
+              disabled: false
+            - name: preco_produto
+              value: "300"
+              description: ""
+              disabled: false
+            - name: descricao_produto
+              value: rgb gamer
+              description: ""
+              disabled: false
+            - name: estoque_produto
+              value: "15"
+              description: ""
+              disabled: false
+            - name: id_categoria
+              value: "2"
+              description: ""
+              disabled: false
+            - name: imagem_produto
+              value: ""
+              description: ""
+              disabled: false
+              fileName: C:\Users\44968756836\Desktop\image.jpg
+              type: file
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/produtos/1
+        name: selectId
+        meta:
+          id: req_d9c02e7a5e124cb5b9e1e7c70036c8df
+          created: 1779101582875
+          modified: 1779101616535
+          isPrivate: false
+          description: ""
+          sortKey: -1779101582875
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Categorias
+    meta:
+      id: fld_c84b7104443a4e40b86e46734b18848a
+      created: 1779101222152
+      modified: 1779101222152
+      sortKey: -1779101222152
+      description: ""
+    children:
+      - url: http://localhost:8080/categorias
+        name: create
+        meta:
+          id: req_13c012d24f7840e9b1461e11e055a741
+          created: 1779101236687
+          modified: 1779101527857
+          isPrivate: false
+          description: ""
+          sortKey: -1779101236687
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "Eletrônico",
+            	"descricao": "Aparelhos elétricos"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/categorias/1
+        name: update
+        meta:
+          id: req_5f2ada8f48724f869aa1f69d5ba8c45e
+          created: 1779101262895
+          modified: 1779101477029
+          isPrivate: false
+          description: ""
+          sortKey: -1779101262895
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nome": "Mouse gamer",
+            	"descricao": "eletrônico com luz"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/categorias
+        name: select
+        meta:
+          id: req_22150764660f4e4096b8634b4e1dd261
+          created: 1779101275752
+          modified: 1779101352589
+          isPrivate: false
+          description: ""
+          sortKey: -1779101275752
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/categorias/6
+        name: delete
+        meta:
+          id: req_bb076edde924431a9420be22748fa90c
+          created: 1779101291452
+          modified: 1779102247358
+          isPrivate: false
+          description: ""
+          sortKey: -1779101291452
+        method: DELETE
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/categorias/1
+        name: selectId
+        meta:
+          id: req_4aeec92f598641a497514d54d44b5f90
+          created: 1779101360167
+          modified: 1779101409876
+          isPrivate: false
+          description: ""
+          sortKey: -1779101291552
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/12.5.0
+            description: ""
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_b0fc4679aa39fa5aa2e3731c8a1769f82ccab2d3
+    created: 1778522406698
+    modified: 1778522406698
+environments:
+  name: Base Environment
+  meta:
+    id: env_b0fc4679aa39fa5aa2e3731c8a1769f82ccab2d3
+    created: 1778522406694
+    modified: 1778522406694
+    isPrivate: false

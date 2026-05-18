@@ -12,6 +12,11 @@ const pedidoControllers = {
                 const idProduto = item.idProduto;
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
                 const quantidade = item.quantidade;
+
+                if(!produtoSelecionado) {
+                    return res.status(404).json({message:"Produto não encontrado"})
+                }
+
                 if (produtoSelecionado.estoque_produto < quantidade) {
                     return res.status(400).json({ message: "Este produto não possui estoque suficiente" })
                 }
@@ -22,7 +27,6 @@ const pedidoControllers = {
             const valorTotal = ItensPedidos.calcularValorTotal(itensPedidos);
 
             const pedido = Pedido.criar({ statusPedido, valorTotal })
-            console.log(pedido);
             const result = await pedidoRepository.criarPedido(pedido, itensPedidos)
             return res.status(200).json({ message: "Pedido adicionado com sucesso", result })
         } catch (error) {
