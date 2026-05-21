@@ -11,7 +11,7 @@ const produtoRepository = {
     selecionarPorId: async (id) => {
         const sql = 'SELECT * FROM produtos WHERE id_produto = ?';
         const [rows] = await db.execute(sql, [id]);
-        return rows[0]; 
+        return rows; 
     },
 
     inserirProduto: async (produto) => {
@@ -98,6 +98,13 @@ const produtoRepository = {
             conn.release();
         }
     },
+
+    selectPedidoProduto: async (id) => {
+        const sql = 'SELECT * FROM itens_pedido WHERE id_produto = ?;';
+        const values = [id];
+        const [rows] = await db.execute (sql, values);
+        return rows;
+    }
 };
 
 export default produtoRepository;

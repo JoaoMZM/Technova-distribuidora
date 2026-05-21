@@ -70,6 +70,7 @@ export class ItensPedidos {
     }
 
     static calcularSubTotal(quantidade, precoUnitario) {
+        console.log(quantidade, precoUnitario)
         return Number((quantidade* precoUnitario).toFixed(2));
     }
 

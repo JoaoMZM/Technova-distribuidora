@@ -6,7 +6,7 @@ import pedidoRoutes from "./pedido.routes.js";
 const routes = Router();
 
 routes.use('/pedidos', pedidoRoutes);
-routes.use('/produtos', produtoRoutes)
-routes.use('/categorias', categoriaRoutes)
+routes.use('/produtos', produtoRoutes);
+routes.use('/categorias', categoriaRoutes);
 
 export default routes;

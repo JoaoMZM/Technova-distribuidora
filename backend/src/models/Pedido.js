@@ -8,7 +8,6 @@ export class Pedido {
     constructor(pStatus, pValor, pId) {
         this.#validarStatusPedido(pStatus);
         this.#validarValorTotal(pValor);
-        this.#validarId(pId);
         
         this.#statusPedido = pStatus;
         this.#valorTotal = pValor;

@@ -110,11 +110,16 @@ const produtoController = {
             const id = Number(req.params.id);
 
             const produto = await produtoRepository.selecionarPorId(id);
+            
+            const pedidoSelecionado = await produtoRepository.selectPedidoProduto(id);
 
+            if (pedidoSelecionado.length !== 0) {
+                return res.status(400).json({message: "Existe um item relacionado a este produto:", pedidoSelecionado})
+            }
             if (!produto) {
                 return res.status(404).json({ message: 'Produto não encontrado' });
             }
-
+            
             const exclusao = await produtoRepository.deletarProduto(id);
 
             return res.status(200).json({ message: 'Produto excluído com sucesso', detalhes: exclusao });
