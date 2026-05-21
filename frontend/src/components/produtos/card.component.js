@@ -10,7 +10,7 @@ export function criarCardProduto(produto) {
     const precoBruto = produto.preco_produto || 0;
     const precoFormatado = Number(precoBruto).toFixed(2);
     const imagemUrl = produto.imagem || "";
-    console.log(produto)
+    
     const estoqueDisponivel = Number(produto.estoque_produto);
 
     div.innerHTML = `

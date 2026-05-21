@@ -27,9 +27,9 @@ const pedidoControllers = {
 
             const valorTotal = ItensPedidos.calcularValorTotal(itensPedidos);
 
-            const pedido = Pedido.criar({ statusPedido, valorTotal })
-            const result = await pedidoRepository.criarPedido(pedido, itensPedidos)
-            return res.status(200).json({ message: "Pedido adicionado com sucesso", result })
+            const pedido = Pedido.criar({ statusPedido, valorTotal });
+            const result = await pedidoRepository.criarPedido(pedido, itensPedidos);
+            return res.status(200).json({ message: "Pedido adicionado com sucesso", result });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Erro interno do servidor", errorMessage: error.message });

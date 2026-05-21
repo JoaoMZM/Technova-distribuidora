@@ -7,7 +7,6 @@ export const produtoApi = {
         try {
             const response = await axios.get(`${API_URL}/produtos`);
             const dadosRecebidos = await response.data;
-            console.log(response)
 
             const listaDeProdutos = Array.isArray(dadosRecebidos)
                 ? dadosRecebidos

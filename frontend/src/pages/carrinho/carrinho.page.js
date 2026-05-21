@@ -10,7 +10,7 @@ export function carrinhoPage() {
 
     function renderizar() {
         const carrinho = carrinhoStorage.obter();
-        console.log(carrinho);
+        
         const total = calcularTotal(carrinho);
 
         if (carrinho.length === 0) {

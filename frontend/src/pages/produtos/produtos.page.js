@@ -22,8 +22,6 @@ export async function produtosPage() {
         // CORRIGIDO: Agora usando a rota da API do front-end
         const produtos = await produtoApi.listarTodos();
 
-        console.log(produtos);
-
         function renderizarProdutos(lista) {
             const container = document.getElementById("lista-produtos");
             container.innerHTML = "";

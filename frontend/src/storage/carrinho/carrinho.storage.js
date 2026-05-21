@@ -42,7 +42,6 @@ export const carrinhoStorage = {
                 return;
             }
 
-            console.log(item.quantidade)
             item.quantidade += 1;
 
             localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));

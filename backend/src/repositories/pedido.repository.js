@@ -81,11 +81,10 @@ const pedidoRepository = {
             await conn.beginTransaction();
 
             const idProduto = item.idProduto;
-            console.log(item);
 
             const sqlItem = 'UPDATE itens_pedido SET quantidade = ?, preco_unitario = ?, subtotal = ?, id_pedido = ?, id_produto = ? WHERE id_item_pedido = ?;';
             const valuesItem = [item.quantidade, item.precoUnitario, item.subTotal, idPedido, idProduto, item.id];
-            console.log(valuesItem);
+
             const [rowsItem] = await conn.execute(sqlItem, valuesItem);
 
             const diferencaQuantidade = item.quantidade - quantidadeAntiga;
