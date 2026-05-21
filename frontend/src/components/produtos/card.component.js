@@ -1,80 +1,75 @@
-import { criarImagem } from "./imagem.component.js";
-import { criarBotao } from "./button.component.js";
 import { carrinhoStorage } from "../../storage/carrinho/carrinho.storage.js";
 
 export function criarCardProduto(produto) {
 
-    const coluna = document.createElement("div");
-    coluna.className = "col-md-4 mb-4";
+    const div = document.createElement("div");
+    div.className = "col-md-4 mb-4";
 
-    const card = document.createElement("div");
-    card.className = "card h-100 shadow";
 
-    const imagem = criarImagem(
-        produto.imagem,
-        produto.nome
-    );
+    const nome = produto.nome_produto || "Sem nome";
+    const precoBruto = produto.preco_produto || 0;
+    const precoFormatado = Number(precoBruto).toFixed(2);
+    const imagemUrl = produto.imagem || "";
 
-    const body = document.createElement("div");
-    body.className = "card-body d-flex flex-column";
 
-    const titulo = document.createElement("h5");
-    titulo.innerText = produto.nome;
+    div.innerHTML = `
+        <div class="card h-100 shadow-sm">
+            <img src="${imagemUrl}" class="card-img-top p-2" alt="${nome}" style="height: 200px; object-fit: contain;">
+            <div class="card-body d-flex flex-column justify-content-between">
+                <div>
+                    <h5 class="card-title font-weight-bold text-dark text-truncate">${nome}</h5>
+                    <p class="card-text text-primary h5 mb-3">R$ ${precoFormatado}</p>
+                </div>
+                
+                <div>
+                    <div class="d-flex align-items-center mb-3">
+                        <button class="btn btn-sm btn-outline-secondary btn-menos">-</button>
+                        <span class="mx-3 fw-bold qtd-produto">1</span>
+                        <button class="btn btn-sm btn-outline-secondary btn-mais">+</button>
+                    </div>
+                    
+                    <button class="btn btn-primary w-100 btn-add-carrinho">
+                        Adicionar ao carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
 
-    const preco = document.createElement("p");
-    preco.innerText = `R$ ${produto.preco.toFixed(2)}`;
 
-    // CONTROLE DE QUANTIDADE
-    let quantidade = 1;
+    const btnMenos = div.querySelector(".btn-menos");
+    const btnMais = div.querySelector(".btn-mais");
+    const txtQtd = div.querySelector(".qtd-produto");
+    const btnAdd = div.querySelector(".btn-add-carrinho");
 
-    const controle = document.createElement("div");
-    controle.className = "d-flex align-items-center gap-2 mb-3";
-
-    const btnDiminuir = document.createElement("button");
-    btnDiminuir.innerText = "-";
-    btnDiminuir.className = "btn btn-sm btn-outline-secondary";
-
-    const spanQuantidade = document.createElement("span");
-    spanQuantidade.innerText = quantidade;
-
-    const btnAumentar = document.createElement("button");
-    btnAumentar.innerText = "+";
-    btnAumentar.className = "btn btn-sm btn-outline-secondary";
-
-    btnAumentar.addEventListener("click", () => {
-        quantidade += 1;
-        spanQuantidade.innerText = quantidade;
-    });
-
-    btnDiminuir.addEventListener("click", () => {
-        if (quantidade > 1) {
-            quantidade -= 1;
-            spanQuantidade.innerText = quantidade;
+    btnMenos.addEventListener("click", () => {
+        let qtd = parseInt(txtQtd.textContent);
+        if (qtd > 1) {
+            txtQtd.textContent = qtd - 1;
         }
     });
 
-    controle.appendChild(btnDiminuir);
-    controle.appendChild(spanQuantidade);
-    controle.appendChild(btnAumentar);
+    btnMais.addEventListener("click", () => {
+        let qtd = parseInt(txtQtd.textContent);
+        txtQtd.textContent = qtd + 1;
+    });
 
-    // BOTÃO
-    const botao = criarBotao(
-        "Adicionar ao carrinho",
-        () => {
-            carrinhoStorage.adicionar(produto, quantidade);
-            alert(`${quantidade} produto(s) adicionados`);
-        }
-    );
+    btnAdd.addEventListener("click", () => {
+        const quantidade = parseInt(txtQtd.textContent);
+        
+        const produtoFormatadoParaCarrinho = {
+            id: String(produto.id_produto),
+            nome: nome,
+            preco: Number(precoBruto),
+            quantidade: quantidade
+        };
 
-    body.appendChild(titulo);
-    body.appendChild(preco);
-    body.appendChild(controle);
-    body.appendChild(botao);
+        carrinhoStorage.adicionar(produtoFormatadoParaCarrinho);
 
-    card.appendChild(imagem);
-    card.appendChild(body);
+        alert(`${nome} (${quantidade}x) adicionado ao carrinho!`);
+        
+        txtQtd.textContent = "1";
+    });
 
-    coluna.appendChild(card);
-
-    return coluna;
+    return div;
 }

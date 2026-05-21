@@ -1,61 +1,64 @@
-const CHAVE = "carrinho";
+
+const CHAVE_CARRINHO = "carrinho"; 
 
 export const carrinhoStorage = {
-
     obter() {
-        const carrinho = localStorage.getItem(CHAVE);
-        return carrinho ? JSON.parse(carrinho) : [];
+        const dados = localStorage.getItem(CHAVE_CARRINHO);
+        return dados ? JSON.parse(dados) : [];
     },
 
-    salvar(carrinho) {
-        localStorage.setItem(CHAVE, JSON.stringify(carrinho));
-    },
-
-    adicionar(produto, quantidade = 1) {
+    adicionar(novoItem) {
         const carrinho = this.obter();
-        const itemExistente = carrinho.find(item => item.id === produto.id);
+        
+        const index = carrinho.findIndex(item => String(item.id) === String(novoItem.id));
 
-        if (itemExistente) {
-            itemExistente.quantidade += quantidade;
+        if (index !== -1) {
+
+            carrinho[index].quantidade += novoItem.quantidade;
         } else {
-            carrinho.push({ ...produto, quantidade });
+
+            carrinho.push(novoItem);
         }
 
-        this.salvar(carrinho);
+        localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
+        this.atualizarBadge();
     },
 
     aumentarQuantidade(id) {
         const carrinho = this.obter();
-        const item = carrinho.find(produto => produto.id === Number(id));
-
+        const item = carrinho.find(item => String(item.id) === String(id));
         if (item) {
             item.quantidade += 1;
+            localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
         }
-
-        this.salvar(carrinho);
+        this.atualizarBadge();
     },
 
     diminuirQuantidade(id) {
         let carrinho = this.obter();
-        const item = carrinho.find(produto => produto.id === Number(id));
-
+        const item = carrinho.find(item => String(item.id) === String(id));
         if (item) {
             item.quantidade -= 1;
-
             if (item.quantidade <= 0) {
-                carrinho = carrinho.filter(produto => produto.id !== Number(id));
+                carrinho = carrinho.filter(item => String(item.id) !== String(id));
             }
+            localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
         }
-
-        this.salvar(carrinho);
-    },
-
-    remover(id) {
-        const carrinho = this.obter().filter(item => item.id !== Number(id));
-        this.salvar(carrinho);
+        this.atualizarBadge();
     },
 
     limpar() {
-        localStorage.removeItem(CHAVE);
+        localStorage.removeItem(CHAVE_CARRINHO);
+        this.atualizarBadge();
+    },
+
+    atualizarBadge() {
+        const carrinho = this.obter();
+        const totalItens = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
+        
+        const badge = document.querySelector(".badge, #carrinho-badge, .header-cart-count");
+        if (badge) {
+            badge.textContent = totalItens;
+        }
     }
 };

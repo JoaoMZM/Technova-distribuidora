@@ -1,7 +1,6 @@
 import { produtoApi } from "../../services/produtos/produtos.api.js";
 import { criarCardProduto } from "../../components/produtos/card.component.js";
 import { criarLinha } from "../../components/shared/coluna-bootstrap.component.js";
-import produtoController from "../../../../backend/src/controllers/produto.controllers.js";
 
 export async function produtosPage() {
     const app = document.getElementById("app");
@@ -20,7 +19,8 @@ export async function produtosPage() {
     `;
 
     try {
-        const produtos = await produtoController.listarTodos();
+        // CORRIGIDO: Agora usando a rota da API do front-end
+        const produtos = await produtoApi.listarTodos();
 
         console.log(produtos);
 

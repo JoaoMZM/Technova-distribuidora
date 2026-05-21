@@ -1,8 +1,7 @@
 import { carrinhoStorage } from "../../storage/carrinho/carrinho.storage.js";
-import { pedidoApi } from "../../services/produtos/produtos.api.js";
+import { produtoApi } from "../../services/produtos/produtos.api.js";
 
 export function carrinhoPage() {
-
     const app = document.getElementById("app");
 
     function calcularTotal(carrinho) {
@@ -10,14 +9,24 @@ export function carrinhoPage() {
     }
 
     function renderizar() {
-
         const carrinho = carrinhoStorage.obter();
         const total = calcularTotal(carrinho);
+
+        if (carrinho.length === 0) {
+            app.innerHTML = `
+                <h2 class="mb-4">Carrinho</h2>
+                <div class="alert alert-info">Seu carrinho está vazio atualmente.</div>
+                <a href="#/" class="btn btn-primary">Voltar para os produtos</a>
+            `;
+
+            carrinhoStorage.atualizarBadge();
+            return;
+        }
 
         app.innerHTML = `
             <h2 class="mb-4">Carrinho</h2>
 
-            <table class="table">
+            <table class="table align-middle">
                 <thead>
                     <tr>
                         <th>Produto</th>
@@ -29,64 +38,68 @@ export function carrinhoPage() {
                 <tbody id="carrinho-body"></tbody>
             </table>
 
-            <h3 id="valor-total"></h3>
-
-            <button id="finalizar pedido" class="btn btn-success">
-                finalizar pedido
-            </button>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <h3 id="valor-total">Total: R$ ${total.toFixed(2)}</h3>
+                <button id="finalizar-pedido" class="btn btn-success btn-lg">
+                    Finalizar Pedido
+                </button>
+            </div>
         `;
 
         const body = document.getElementById("carrinho-body");
 
         carrinho.forEach(item => {
             const subtotal = item.preco * item.quantidade;
+            const precoItem = Number(item.preco || 0);
 
             body.innerHTML += `
                 <tr>
-                    <td>${item.nome}</td>
+                    <td class="fw-bold">${item.nome}</td>
                     <td>
                         <div class="d-flex align-items-center gap-2">
                             <button class="btn btn-sm btn-outline-secondary btn-diminuir" data-id="${item.id}">-</button>
-                            <span>${item.quantidade}</span>
+                            <span class="fw-bold px-2">${item.quantidade}</span>
                             <button class="btn btn-sm btn-outline-secondary btn-aumentar" data-id="${item.id}">+</button>
                         </div>
                     </td>
-                    <td>R$ ${item.preco.toFixed(2)}</td>
-                    <td>R$ ${subtotal.toFixed(2)}</td>
+                    <td>R$ ${precoItem.toFixed(2)}</td>
+                    <td class="text-primary fw-bold">R$ ${subtotal.toFixed(2)}</td>
                 </tr>
             `;
         });
 
-        document.getElementById("valor-total").innerText =
-            `Total: R$ ${total.toFixed(2)}`;
-
         document.querySelectorAll(".btn-aumentar").forEach(btn => {
             btn.addEventListener("click", () => {
                 carrinhoStorage.aumentarQuantidade(btn.dataset.id);
-                renderizar();
+                renderizar(); 
             });
         });
 
         document.querySelectorAll(".btn-diminuir").forEach(btn => {
             btn.addEventListener("click", () => {
                 carrinhoStorage.diminuirQuantidade(btn.dataset.id);
-                renderizar();
+                renderizar(); 
             });
         });
 
-        document.getElementById("finalizar pedido").addEventListener("click", async () => {
-            const pedido = { itens: carrinho, total };
 
-            try {
-                await pedidoApi.finalizarPedido(pedido);
-                alert("Pedido realizado com sucesso");
-                carrinhoStorage.limpar();
-                location.hash = "#/";
-            } catch (error) {
-                alert(error.message);
-            }
-        });
+        const btnFinalizar = document.getElementById("finalizar-pedido");
+        if (btnFinalizar) {
+            btnFinalizar.addEventListener("click", async () => {
+                const pedido = { itens: carrinho, total };
+
+                try {
+                    await produtoApi.finalizarPedido(pedido);
+                    alert("Pedido realizado com sucesso!");
+                    carrinhoStorage.limpar();
+                    location.hash = "#/";
+                } catch (error) {
+                    alert(error.message || "Erro ao finalizar pedido.");
+                }
+            });
+        }
     }
+
 
     renderizar();
 }
