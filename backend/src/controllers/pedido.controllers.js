@@ -13,14 +13,14 @@ const pedidoControllers = {
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
                 const quantidade = item.quantidade;
 
-                if(!produtoSelecionado) {
-                    return res.status(404).json({message:"Produto não encontrado"})
+                if (!produtoSelecionado) {
+                    return res.status(404).json({ message: "Produto não encontrado" })
                 }
 
                 if (produtoSelecionado.estoque_produto < quantidade) {
                     return res.status(400).json({ message: "Este produto não possui estoque suficiente" })
                 }
-                const precoUnitario = await Number(produtoSelecionado.preco_produto);
+                const precoUnitario = Number(produtoSelecionado.preco_produto);
                 const subTotal = ItensPedidos.calcularSubTotal(quantidade, precoUnitario);
                 return ItensPedidos.criar({ precoUnitario, subTotal, quantidade, idProduto });
             }));
@@ -52,6 +52,100 @@ const pedidoControllers = {
             }
             const result = await pedidoRepository.selectPedidos();
             return res.status(200).json({ message: "Pedidos selecionados:", result })
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Erro interno do servidor", errorMessage: error.message });
+        }
+    },
+    adicionarItem: async (req, res) => {
+        try {
+            const id = req.params.id;
+            const { idProduto, quantidade } = req.body;
+
+            const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
+            if (produtoSelecionado.length === 0) {
+                return res.status(404).json({ message: "Produto não encontrado" });
+            }
+            const precoUnitario = produtoSelecionado[0].preco_produto;
+
+            const pedidoSelecionado = await pedidoRepository.selectPedidosId(id);
+            const statusPedido = pedidoSelecionado[0].status_pedido;
+
+            const valorAnterior = pedidoSelecionado[0].valor_total;
+
+            const subTotal = ItensPedidos.calcularSubTotal(quantidade, precoUnitario);
+
+            const valorDecimal = Number(valorAnterior) + Number(subTotal);
+            const valorTotal = valorDecimal.toFixed(2)
+
+            const pedido = Pedido.editar({ statusPedido, valorTotal, id })
+            const itemPedido = ItensPedidos.criar({ precoUnitario, subTotal, quantidade, idProduto });
+
+            const result = await pedidoRepository.adicionarItemPedido(pedido, itemPedido);
+
+            return res.status(200).json({ message: "Item adicionado com sucesso", result });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Erro interno do servidor", errorMessage: error.message });
+        }
+    },
+    atualizarItemPedido: async (req, res) => {
+        try {
+            const id = req.params.id;
+            let { idProduto, quantidade, idPedido } = req.body;
+
+            const itemSelecionado = await pedidoRepository.buscarItemPorId(id);
+            if (!itemSelecionado || itemSelecionado.length === 0) {
+                return res.status(404).json({ message: "Item não encontrado" });
+            }
+
+            const quantidadeAntiga = itemSelecionado[0].quantidade;
+
+            idProduto = idProduto ?? itemSelecionado[0].id_produto;
+            quantidade = quantidade ?? itemSelecionado[0].quantidade;
+            idPedido = idPedido ?? itemSelecionado[0].id_pedido;
+
+            const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
+            console.log(produtoSelecionado);
+            if (produtoSelecionado.length === 0) {
+                return res.status(404).json({ message: "Produto não encontrado" });
+            }
+
+            const precoUnitario = produtoSelecionado[0].preco_produto;
+
+            const subTotal = ItensPedidos.calcularSubTotal(quantidade, precoUnitario);
+
+            const itemPedido = ItensPedidos.editar({ precoUnitario, subTotal, quantidade, idProduto, id });
+
+            const result = await pedidoRepository.atualizarItemPedido(itemPedido, idPedido, quantidadeAntiga);
+
+            return res.status(200).json({ message: "Item atualizado com sucesso", result });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Erro interno do servidor", errorMessage: error.message });
+        }
+    },
+    deletarItemPedido: async (req, res) => {
+        try {
+            const id = req.params.id;
+
+            const itemSelecionado = await pedidoRepository.buscarItemPorId(id);
+
+            if (!itemSelecionado || itemSelecionado.length === 0) {
+                return res.status(404).json({ message: "Item não encontrado" });
+            }
+
+            const dadosItem = {
+                precoUnitario: itemSelecionado[0].preco_unitario, subTotal: itemSelecionado[0].subtotal, quantidade: itemSelecionado[0].quantidade, idProduto: itemSelecionado[0].id_produto
+            };
+
+            const itemDeletado = ItensPedidos.criar(dadosItem);
+
+            const idPedido = itemSelecionado[0].id_pedido;
+
+            const result = await pedidoRepository.deletarItemPedido(id, itemDeletado, idPedido);
+
+            return res.status(200).json({ message: "Item deletado com sucesso", result });
         } catch (error) {
             console.error(error);
             return res.status(500).json({ message: "Erro interno do servidor", errorMessage: error.message });

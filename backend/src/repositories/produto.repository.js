@@ -11,7 +11,7 @@ const produtoRepository = {
     selecionarPorId: async (id) => {
         const sql = 'SELECT * FROM produtos WHERE id_produto = ?';
         const [rows] = await db.execute(sql, [id]);
-        return rows[0]; 
+        return rows; 
     },
 
     inserirProduto: async (produto) => {
