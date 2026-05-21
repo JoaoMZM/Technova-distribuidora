@@ -5,6 +5,6 @@ export function criarBotao(texto, onClick) {
     botao.innerText = texto;
 
     botao.addEventListener("click", onClick);
-
+    
     return botao;
 }

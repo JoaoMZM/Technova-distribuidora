@@ -10,7 +10,8 @@ export function criarCardProduto(produto) {
     const precoBruto = produto.preco_produto || 0;
     const precoFormatado = Number(precoBruto).toFixed(2);
     const imagemUrl = produto.imagem || "";
-
+    console.log(produto)
+    const estoqueDisponivel = Number(produto.estoque_produto);
 
     div.innerHTML = `
         <div class="card h-100 shadow-sm">
@@ -51,12 +52,30 @@ export function criarCardProduto(produto) {
 
     btnMais.addEventListener("click", () => {
         let qtd = parseInt(txtQtd.textContent);
+
+        if (qtd >= estoqueDisponivel) {
+            alert(`Limite atingido! Desculpe, temos apenas ${estoqueDisponivel} unidades em estoque.`);
+            return;
+        }
+
         txtQtd.textContent = qtd + 1;
     });
 
     btnAdd.addEventListener("click", () => {
         const quantidade = parseInt(txtQtd.textContent);
-        
+        const dadosItens = {
+            quantidade: txtQtd.textContent,
+            idProduto: produto.id_produto,
+            idPedido: produto.id_pedido
+        }
+
+        let qtd = parseInt(txtQtd.textContent);
+
+        if (qtd >= estoqueDisponivel) {
+            alert(`Limite atingido! Desculpe, temos apenas ${estoqueDisponivel} unidades em estoque.`);
+            return;
+        }
+
         const produtoFormatadoParaCarrinho = {
             id: String(produto.id_produto),
             nome: nome,
@@ -67,7 +86,7 @@ export function criarCardProduto(produto) {
         carrinhoStorage.adicionar(produtoFormatadoParaCarrinho);
 
         alert(`${nome} (${quantidade}x) adicionado ao carrinho!`);
-        
+
         txtQtd.textContent = "1";
     });
 
