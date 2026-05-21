@@ -3,7 +3,7 @@ import { db } from "../configs/database.js";
 const produtoRepository = {
 
     selecionarTodos: async () => {
-        const sql = `SELECT p.id_produto, p.nome_produto, p.preco_produto, p.imagem_produto, p.id_categoria, c.nome_categoria AS categoria FROM produtos p INNER JOIN categorias c ON p.id_categoria = c.id_categoria`;
+        const sql = `SELECT p.estoque_produto, p.id_produto, p.nome_produto, p.preco_produto, p.imagem_produto, p.id_categoria, c.nome_categoria AS categoria FROM produtos p INNER JOIN categorias c ON p.id_categoria = c.id_categoria`;
         const [rows] = await db.execute(sql);
         return rows;
     },

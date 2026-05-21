@@ -69,13 +69,6 @@ export function criarCardProduto(produto) {
             idPedido: produto.id_pedido
         }
 
-        let qtd = parseInt(txtQtd.textContent);
-
-        if (qtd >= estoqueDisponivel) {
-            alert(`Limite atingido! Desculpe, temos apenas ${estoqueDisponivel} unidades em estoque.`);
-            return;
-        }
-
         const produtoFormatadoParaCarrinho = {
             id: String(produto.id_produto),
             nome: nome,
@@ -84,8 +77,6 @@ export function criarCardProduto(produto) {
         };
 
         carrinhoStorage.adicionar(produtoFormatadoParaCarrinho);
-
-        alert(`${nome} (${quantidade}x) adicionado ao carrinho!`);
 
         txtQtd.textContent = "1";
     });

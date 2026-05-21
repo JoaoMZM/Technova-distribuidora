@@ -1,6 +1,7 @@
 const API_URL = "http://localhost:8080";
 import 'axios'
 import axios from 'axios';
+import { carrinhoStorage } from '../../storage/carrinho/carrinho.storage';
 export const produtoApi = {
     async listarTodos() {
         try {
@@ -23,10 +24,20 @@ export const produtoApi = {
         }
     },
     async finalizarPedido(carrinho) {
+        const itensCarrinho = carrinhoStorage.obter();
+        
+        const itens = itensCarrinho.map((item) => {
+            return {
+                idProduto: Number(item.id),
+                quantidade: item.quantidade
+            }
+        })
         const body = {
-            
-        }
-        const res = await axios.post(`${API_URL}/pedidos`);
-        return res.json();
+            "statusPedido": 'PENDENTE',
+            "itens": itens
+        }  
+        carrinhoStorage.limpar();
+        const res = await axios.post(`${API_URL}/pedidos`, body);
+        return res.data;
     }
 };

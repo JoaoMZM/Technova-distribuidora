@@ -49,9 +49,12 @@ export async function produtosPage() {
         document.getElementById("busca").addEventListener("input", (e) => {
             const termo = e.target.value.toLowerCase().trim();
 
-            const filtrados = produtos.filter(p =>
-                p.nome.toLowerCase().includes(termo)
-            );
+            const filtrados = produtos.filter(p => {
+
+                const nome = p.nome_produto || p.nome;
+
+                return nome?.toLowerCase().includes(termo);
+            });
 
             renderizarProdutos(filtrados);
         });

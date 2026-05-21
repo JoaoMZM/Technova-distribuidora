@@ -12,7 +12,7 @@ const pedidoControllers = {
                 const idProduto = item.idProduto;
                 const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
                 const quantidade = item.quantidade;
-
+                
                 if (!produtoSelecionado) {
                     return res.status(404).json({ message: "Produto não encontrado" })
                 }
@@ -20,10 +20,11 @@ const pedidoControllers = {
                 if (produtoSelecionado.estoque_produto < quantidade) {
                     return res.status(400).json({ message: "Este produto não possui estoque suficiente" })
                 }
-                const precoUnitario = Number(produtoSelecionado.preco_produto);
+                const precoUnitario = Number(produtoSelecionado[0].preco_produto);
                 const subTotal = ItensPedidos.calcularSubTotal(quantidade, precoUnitario);
                 return ItensPedidos.criar({ precoUnitario, subTotal, quantidade, idProduto });
             }));
+
             const valorTotal = ItensPedidos.calcularValorTotal(itensPedidos);
 
             const pedido = Pedido.criar({ statusPedido, valorTotal })
@@ -106,7 +107,7 @@ const pedidoControllers = {
             idPedido = idPedido ?? itemSelecionado[0].id_pedido;
 
             const produtoSelecionado = await produtoRepository.selecionarPorId(idProduto);
-            console.log(produtoSelecionado);
+            
             if (produtoSelecionado.length === 0) {
                 return res.status(404).json({ message: "Produto não encontrado" });
             }

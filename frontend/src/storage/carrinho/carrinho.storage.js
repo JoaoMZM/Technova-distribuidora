@@ -10,21 +10,21 @@ export const carrinhoStorage = {
     },
 
     adicionar(novoItem) {
-        const carrinho = this.obter();
+        const carrinho = this.obter(); 
+
+        const produto = produtos.find(p => String(p.id_produto) === String(novoItem.id));
+
         const index = carrinho.findIndex(item => String(item.id) === String(novoItem.id));
-        const itens = carrinhoStorage.obter();
-        const itensIdProduto = todosOsItens.filter(item => String(item.id) === String(novoItem.id));
-        
-        const produto = produtos.find(produto => novoItem.id == produto.id_produto);
-        
-        if (novoItem.quantidade > produto.estoque_produto) {
-            alert("Desculpa, estamos sem estoque!");
+        const quantidadeNoCarrinho = index !== -1 ? carrinho[index].quantidade : 0;
+
+        if (quantidadeNoCarrinho + novoItem.quantidade > produto.estoque_produto) {
+            alert(`Desculpa, estamos sem estoque.`);
+            return;
         }
 
         if (index !== -1) {
             carrinho[index].quantidade += novoItem.quantidade;
         } else {
-
             carrinho.push(novoItem);
         }
 
@@ -36,14 +36,15 @@ export const carrinhoStorage = {
         const carrinho = this.obter();
         const item = carrinho.find(item => String(item.id) === String(id));
         const produto = produtos.find(produto => produto.id_produto == id);
-
         if (item) {
-            console.log(produto);
-            item.quantidade += 1;
             if (item.quantidade > produto.estoque_produto) {
-                alert("Limite atingido! Desculpe, temos apenas 15 unidades em estoque.");
+                alert("Desculpe, estamos sem estoque!");
                 return;
             }
+
+            console.log(item.quantidade)
+            item.quantidade += 1;
+
             localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
         }
         this.atualizarBadge();
